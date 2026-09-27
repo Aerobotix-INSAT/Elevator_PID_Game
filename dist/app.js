@@ -22,10 +22,13 @@ $('integral-limit').addEventListener('change',()=>{$('integral-limit').value=sim
 $('zero-integral').onchange=()=>{sim.zeroIntegralOnCrossing=$('zero-integral').checked;};
 $('blood').onchange=()=>{blood=$('blood').checked;if(!blood){particles=[];stains=[];}document.querySelector('.blood-label').textContent=blood?'● STYLIZED BLOOD':'BLOOD EFFECTS OFF';};$('clean').onclick=()=>{particles=[];stains=[];};
 $('sandbox').onclick=()=>setMode('sandbox');$('challenges').onclick=()=>{level=0;setMode('challenge');};$('next-lesson').onclick=()=>{if(level<2){level++;loadLesson();}else{level=0;setMode('sandbox');}};
+$('share').onclick=()=>{running=false;status();$('share-dialog').showModal();};
+$('close-share').onclick=$('done-share').onclick=()=>$('share-dialog').close();
+$('share-dialog').addEventListener('close',()=>$('share').focus());
 $('help').onclick=()=>$('help-dialog').showModal();$('close-help').onclick=$('start-help').onclick=()=>$('help-dialog').close();
 function graphTab(v){view=v;$('position-tab').classList.toggle('selected',v==='position');$('force-tab').classList.toggle('selected',v==='forces');$('legend').innerHTML=v==='position'?'<span class="legend-line lime"></span>Position <span class="legend-line target"></span>Target':'<span class="lime">━ P</span> <span class="purple">━ I</span> <span class="cyan">━ D</span> <span>kN</span>';}
 $('position-tab').onclick=()=>graphTab('position');$('force-tab').onclick=()=>graphTab('forces');
-window.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName)||$('help-dialog').open)return;if(e.code==='Space'){e.preventDefault();$('run').click();}if(e.key.toLowerCase()==='r')reset();if(/^[0-4]$/.test(e.key)&&mode==='sandbox')changeFloor(Number(e.key));});
+window.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName)||$('help-dialog').open||$('share-dialog').open)return;if(e.code==='Space'){e.preventDefault();$('run').click();}if(e.key.toLowerCase()==='r')reset();if(/^[0-4]$/.test(e.key)&&mode==='sandbox')changeFloor(Number(e.key));});
 function canvas(id){const c=$(id),r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);if(c.width!==Math.round(r.width*d)||c.height!==Math.round(r.height*d)){c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);}const ctx=c.getContext('2d');ctx.setTransform(d,0,0,d,0,0);return{ctx,w:r.width,h:r.height};}
 function line(c,x1,y1,x2,y2,color,width=1){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();}
 function rect(c,x,y,w,h,fill){c.fillStyle=fill;c.fillRect(x,y,w,h);}
